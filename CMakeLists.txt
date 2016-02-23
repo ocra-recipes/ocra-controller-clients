@@ -16,20 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 2.8.11)
-project(ocra-wbi CXX)
+project(ocra-controller-clients CXX)
 
-set(OCRA_WBI_MAJOR_VERSION 0)
-set(OCRA_WBI_MINOR_VERSION 0)
-set(OCRA_WBI_PATCH_VERSION 1)
-set(OCRA_WBI_VERSION ${OCRA_WBI_MAJOR_VERSION}.${OCRA_WBI_MINOR_VERSION}.${OCRA_WBI_PATCH_VERSION})
+option(GENERATE_DOCUMENTATION "Generate the doxygen documentation." FALSE)
 
-option(GENERATE_DOCUMENTATION "Generate the doxygen documentation." TRUE)
-
-
-find_package(ICUB REQUIRED)
+find_package(YARP REQUIRED)
 find_package(YCM REQUIRED)
-find_package(iDynTree REQUIRED)
-find_package(yarpWholeBodyInterface REQUIRED)
+find_package(OcraYarp REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH
         ${YARP_MODULE_PATH}
@@ -37,11 +30,10 @@ list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules
      )
 
-find_package(OcraRecipes REQUIRED)
 
 
 include_directories(AFTER
-                    ${OcraRecipes_INCLUDE_DIRS}
+                    ${OcraYarp_INCLUDE_DIRS}
                     )
 
 
@@ -53,9 +45,8 @@ include(YarpInstallationHelpers)
 yarp_configure_external_installation(codyco)
 
 
-add_subdirectory(libs)
-add_subdirectory(modules)
-add_subdirectory(bin)
+add_subdirectory(example-client)
+# add_subdirectory(your-client)
 
 
 

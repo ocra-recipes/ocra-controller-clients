@@ -1,4 +1,4 @@
-/*! \file       .cpp
+/*! \file       example-client.cpp
  *  \brief
  *  \details
  *  \author     [Ryan Lober](http://www.ryanlober.com)
