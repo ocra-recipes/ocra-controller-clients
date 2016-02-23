@@ -1,0 +1,42 @@
+sudo: required
+dist: trusty
+
+os:
+  - linux
+  - osx
+
+language: c++
+
+compiler:
+  - gcc
+  - clang
+env:
+  - TRAVIS_BUILD_TYPE=Debug TRAVIS_CMAKE_GENERATOR="Unix Makefiles"
+  - TRAVIS_BUILD_TYPE=Release TRAVIS_CMAKE_GENERATOR="Unix Makefiles"
+  - TRAVIS_BUILD_TYPE=Debug TRAVIS_CMAKE_GENERATOR="Xcode"
+  - TRAVIS_BUILD_TYPE=Release TRAVIS_CMAKE_GENERATOR="Xcode"
+
+matrix:
+  exclude:
+    - os: linux
+      env: TRAVIS_BUILD_TYPE=Release TRAVIS_CMAKE_GENERATOR="Xcode"
+    - os: linux
+      env: TRAVIS_BUILD_TYPE=Debug TRAVIS_CMAKE_GENERATOR="Xcode"
+
+branches:
+  except:
+  - gh-pages
+  - appveyor
+
+install:
+    - CI_DIR=$PWD
+    - git clone https://github.com/robotology/codyco-superbuild.git
+    - cd codyco-superbuild
+    - if [ "$TRAVIS_OS_NAME" = linux -o -z "$TRAVIS_OS_NAME" ]; then sed -i 's/install -qq/install -y -qq/g' .ci/travis-deps.sh ; fi
+    - if [ "$TRAVIS_OS_NAME" = linux -o -z "$TRAVIS_OS_NAME" ]; then sed -i 's/apt-get --force-yes/apt-get -y -qq --force-yes/g' .ci/travis-deps.sh ; fi
+    - sh .ci/travis-deps.sh
+    - mkdir build ; cd build
+    - cmake -G"${TRAVIS_CMAKE_GENERATOR}" -DCODYCO_BUILD_OCRA_MODULES:BOOL=TRUE -DCODYCO_TRAVIS_CI:BOOL=ON -DCMAKE_BUILD_TYPE=${TRAVIS_BUILD_TYPE} -DNON_INTERACTIVE_BUILD:BOOL=TRUE ..
+
+script:
+    - sh ../.ci/travis-build.sh
