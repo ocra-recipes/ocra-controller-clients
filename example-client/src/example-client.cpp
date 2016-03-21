@@ -24,119 +24,59 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <ocra-yarp/ControlThread.h>
-#include <ocra-yarp/TrajectoryThread.h>
-#include <ocra-yarp/ControllerConnection.h>
 
-int main(int argc, char *argv[])
+
+
+#include <yarp/os/ResourceFinder.h>
+#include <yarp/os/Network.h>
+#include <yarp/os/Log.h>
+#include <yarp/os/LogStream.h>
+#include <yarp/os/Time.h>
+
+// #include "example-client/ExampleClientThread.h"
+#include "ocra-recipes/ControllerClient.h"
+
+
+int main (int argc, char * argv[])
 {
+    yarp::os::Log yLog;
     yarp::os::Network yarp;
 
-    if (!yarp.checkNetwork())
+    double network_timeout = 10.0;
+    if (!yarp.checkNetwork(network_timeout))
     {
-        std::cout << "No yarp network, quitting\n";
-        return 1;
+        yLog.fatal() << "YARP network is not available";
+        return -1;
     }
 
-    ocra_yarp::ControllerConnection ctlCon;
+    std::shared_ptr<ocra_recipes::ControllerClient> ctrlClient = std::make_shared<ocra_recipes::ControllerClient>();
 
-    std::vector<std::string> portNames = ctlCon.getTaskPortNames();
 
-    std::cout << "portNames[4]: " << portNames[4] << std::endl;
-
-    ocra_yarp::TRAJECTORY_TYPE trajType = ocra_yarp::GAUSSIAN_PROCESS;
-
-    Eigen::MatrixXd waypoints(3,1);
-    waypoints <<    0.1,
-                    0.1,
-                    0.6;
-
-    ocra_yarp::TERMINATION_STRATEGY termStrategy = ocra_yarp::WAIT_DEACTIVATE;
-
-    ocra_yarp::TrajectoryThread leftHandTrajThread(10, portNames[4], waypoints, trajType, termStrategy);
-
-    leftHandTrajThread.setGoalErrorThreshold(0.045);
-
-    std::cout << "Thread started." << std::endl;
-    leftHandTrajThread.start();
-
-    bool done=false;
-    double startTime=yarp::os::Time::now();
-
-    std::cout << "In the while loop..." << std::endl;
-
-    bool p1, p2, p3;
-    p1 = true;
-    p2 = true;
-    p3 = true;
-    while(!done)
+    double t = 0.0;
+    while(t < 5.0)
     {
-
-        if ((yarp::os::Time::now()-startTime)>10.0){
-            if(p1){std::cout << "Changing to BACK_AND_FORTH mode:" << std::endl; p1=false;}
-            leftHandTrajThread.setTerminationStrategy(ocra_yarp::BACK_AND_FORTH);
-            if ((yarp::os::Time::now()-startTime)>20.0){
-                if(p2){std::cout << "Changing to STOP_THREAD mode:" << std::endl; p2=false;}
-                leftHandTrajThread.setTerminationStrategy(ocra_yarp::STOP_THREAD);
-                if ((yarp::os::Time::now()-startTime)>30.0){
-                    if(p3){std::cout << "Finished while loop!" << std::endl; p3=false;}
-                    done=true;
-                }
-            }
-        }
+        yarp::os::Time::delay(1);
+        t += 1;
     }
-
-    std::cout << "Stopping thread..." << std::endl;
-    leftHandTrajThread.stop();
-
-    std::cout << "Module finished." << std::endl;
+    // int threadPeriod = 10;
+    // ocra_yarp::OcraControllerClientThread::shared_ptr threadPtr = std::make_shared<ExampleClientThread>(threadPeriod);
+    // ocra_yarp::OcraControllerClientModule module(threadPtr);
+    //
+    //
+    // yarp::os::ResourceFinder rf;
+    // module.configure(rf);
+    // // rf.setVerbose(true);
+    // // rf.setDefaultConfigFile("example-client.ini"); //default config file name.
+    // // rf.setDefaultContext("example-client"); //when no parameters are given to the module this is the default context
+    // // rf.configure(argc,argv);
+    // //
+    // // if (rf.check("help"))
+    // // {
+    // //     module.printHelp();
+    // //     return 0;
+    // // }
+    //
+    //
+    // return module.runModule(rf);
     return 0;
 }
-
-
-///
-// rHandPosStart = rightHandTask->getTaskFramePosition();
-// Eigen::Vector3d rHandDisplacement;
-//
-// rHandDisplacement << 0.05, 0.05, 0.0;
-// rHandPosEnd = rHandPosStart + rHandDisplacement;
-// rHandPosEnd(2) = 0.41;
-//
-//
-// // Set waypoints and traj
-// rightHandTrajectory->setWaypoints(rHandPosStart, rHandPosEnd);
-//
-// rHandPosStart = rHandPosEnd;
-//
-// Eigen::Vector3d rHandDisplacement, rHandPosMiddle;
-// rHandDisplacement << 0.1, 0.1, 0.05;
-// rHandPosMiddle = rHandPosStart + rHandDisplacement;
-// rHandDisplacement << 0.15, 0.25, 0.0;
-// rHandPosEnd = rHandPosStart + rHandDisplacement;
-//
-// Eigen::MatrixXd trajWaypoints(3,3);
-// trajWaypoints.col(0) << rHandPosStart;
-// trajWaypoints.col(1) << rHandPosMiddle;
-// trajWaypoints.col(2) << rHandPosEnd;
-//
-//
-// // Set waypoints and traj
-// rightHandTrajectory->setMaxVelocity(0.05); // default is 0.1 m/s
-// rightHandTrajectory->setWaypoints(trajWaypoints);
-//
-//
-// std::vector<bool> isOptWaypoint(3);
-// isOptWaypoint[0] = false;
-// isOptWaypoint[1] = true;
-// isOptWaypoint[2] = false;
-//
-// std::vector<Eigen::VectorXi> dofToOptimize(3);
-// dofToOptimize[0] = Eigen::VectorXi();
-// Eigen::VectorXi tmpVec(3);
-// tmpVec << 1,2,3; // X Y Z
-// dofToOptimize[1] = tmpVec;
-// dofToOptimize[2] = Eigen::VectorXi();
-// rightHandTrajectory->setOptimizationWaypoints(isOptWaypoint);
-// rightHandTrajectory->setDofToOptimize(dofToOptimize);
-//
-// optVariables = rightHandTrajectory->getBoptVariables();

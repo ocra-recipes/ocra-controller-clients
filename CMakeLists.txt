@@ -18,24 +18,26 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(ocra-controller-clients CXX)
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+else()
+    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
 option(GENERATE_DOCUMENTATION "Generate the doxygen documentation." FALSE)
 
 find_package(YARP REQUIRED)
 find_package(YCM REQUIRED)
-find_package(OcraYarp REQUIRED)
+# find_package(OcraYarp REQUIRED)
+find_package(OcraRecipes REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH
         ${YARP_MODULE_PATH}
         ${YCM_MODULE_PATH}
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules
      )
-
-
-
-include_directories(AFTER
-                    ${OcraYarp_INCLUDE_DIRS}
-                    )
-
 
 #add yarp definitions
 add_definitions(${YARP_DEFINES}) #this contains also -D_REENTRANT

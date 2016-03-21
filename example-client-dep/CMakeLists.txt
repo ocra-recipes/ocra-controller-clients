@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SET(PROJECTNAME example-client)
+SET(PROJECTNAME example-client-dep)
 PROJECT(${PROJECTNAME} CXX)
 
 FILE(GLOB folder_source ./src/*.cpp)
@@ -24,16 +24,12 @@ FILE(GLOB folder_header ./include/${PROJECTNAME}/*.h)
 SOURCE_GROUP("Source Files" FILES ${folder_source})
 SOURCE_GROUP("Header Files" FILES ${folder_header})
 
-INCLUDE_DIRECTORIES(
-${PROJECT_SOURCE_DIR}/include
-${YARP_INCLUDE_DIRS}
-${OcraRecipes_INCLUDE_DIRS}
-)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 
 ADD_EXECUTABLE(${PROJECTNAME} ${folder_source} ${folder_header})
 
 LIST(APPEND link_libs   ${YARP_LIBRARIES}
-                        ${OcraRecipes_LIBRARIES}
+                        ${OcraYarp_LIBRARIES}
                         )
 
 TARGET_LINK_LIBRARIES(${PROJECTNAME} ${link_libs})
