@@ -24,18 +24,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
-
 #include <yarp/os/ResourceFinder.h>
 #include <yarp/os/Network.h>
 #include <yarp/os/Log.h>
 #include <yarp/os/LogStream.h>
 #include <yarp/os/Time.h>
 
-// #include "example-client/ExampleClientThread.h"
-#include "ocra-recipes/ControllerClient.h"
-
+#include "example-client/ExampleClient.h"
 
 int main (int argc, char * argv[])
 {
@@ -49,34 +44,27 @@ int main (int argc, char * argv[])
         return -1;
     }
 
-    std::shared_ptr<ocra_recipes::ControllerClient> ctrlClient = std::make_shared<ocra_recipes::ControllerClient>();
+    ocra_icub::ModelInitializer modelIni = ocra_icub::ModelInitializer();
 
+    int loopPeriod = 10;
+    std::shared_ptr<ocra_icub::IcubControllerClient> ctrlClient;
+    ctrlClient = std::make_shared<ExampleClient>(modelIni.getModel(), loopPeriod);
 
-    double t = 0.0;
-    while(t < 5.0)
+    ocra_icub::IcubControllerClientManager clientManager = ocra_icub::IcubControllerClientManager(ctrlClient)
+
+    yarp::os::ResourceFinder rf;
+    rf.setVerbose(true);
+    rf.setDefaultConfigFile("example-client.ini"); //default config file name.
+    rf.setDefaultContext("example-client"); //when no parameters are given to the module this is the default context
+    rf.configure(argc,argv);
+
+    if (rf.check("help"))
     {
-        yarp::os::Time::delay(1);
-        t += 1;
+        clientManager.printHelp();
+        return 0;
     }
-    // int threadPeriod = 10;
-    // ocra_yarp::OcraControllerClientThread::shared_ptr threadPtr = std::make_shared<ExampleClientThread>(threadPeriod);
-    // ocra_yarp::OcraControllerClientModule module(threadPtr);
-    //
-    //
-    // yarp::os::ResourceFinder rf;
-    // module.configure(rf);
-    // // rf.setVerbose(true);
-    // // rf.setDefaultConfigFile("example-client.ini"); //default config file name.
-    // // rf.setDefaultContext("example-client"); //when no parameters are given to the module this is the default context
-    // // rf.configure(argc,argv);
-    // //
-    // // if (rf.check("help"))
-    // // {
-    // //     module.printHelp();
-    // //     return 0;
-    // // }
-    //
-    //
-    // return module.runModule(rf);
-    return 0;
+
+    clientManager.configure(rf);
+
+    return clientManager.runModule(rf);
 }

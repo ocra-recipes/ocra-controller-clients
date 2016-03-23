@@ -1,17 +1,32 @@
-// #include "example-client/ExampleClientThread.h"
+#include "example-client/ExampleClient.h"
+
+ExampleClient::ExampleClient(std::shared_ptr<ocra_icub::OcraWbiModel> modelPtr, const int loopPeriod)
+: ocra_icub::IcubControllerClient(modelPtr, loopPeriod)
+{
+    // poopoo
+}
+
+ExampleClient::~ExampleClient()
+{
+    //caca
+}
+
+bool ExampleClient::initialize()
+{
+    return true;
+}
+
+void ExampleClient::release()
+{
+    /* Do nothing. */
+}
+
+void ExampleClient::loop()
+{
+    std::cout << "I'm the ExampleClient!" << std::endl;
+}
 //
-// ExampleClientThread::ExampleClientThread(const int period)
-// : OcraControllerClientThread(period)
-// {
-//     // poopoo
-// }
-//
-// ExampleClientThread::~ExampleClientThread()
-// {
-//     //caca
-// }
-//
-// bool ExampleClientThread::client_threadInit()
+// bool ExampleClient::client_threadInit()
 // {
 //     // return startModelThread();
 //     startTime = yarp::os::Time::now();
@@ -46,11 +61,11 @@
 //
 //     return true;
 // }
-// void ExampleClientThread::client_threadRelease()
+// void ExampleClient::client_threadRelease()
 // {
 //     // stopModelThread();
 // }
-// void ExampleClientThread::client_run()
+// void ExampleClient::client_run()
 // {
 //     // if ((yarp::os::Time::now() - startTime) > 5.0 && trigger) {
 //     //     trigger = false;
