@@ -28,12 +28,14 @@ INCLUDE_DIRECTORIES(
 ${PROJECT_SOURCE_DIR}/include
 ${YARP_INCLUDE_DIRS}
 ${OcraRecipes_INCLUDE_DIRS}
+${OcraIcub_INCLUDE_DIRS}
 )
 
 ADD_EXECUTABLE(${PROJECTNAME} ${folder_source} ${folder_header})
 
 LIST(APPEND link_libs   ${YARP_LIBRARIES}
                         ${OcraRecipes_LIBRARIES}
+                        ${OcraIcub_LIBRARIES}
                         )
 
 TARGET_LINK_LIBRARIES(${PROJECTNAME} ${link_libs})

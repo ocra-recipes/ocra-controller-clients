@@ -31,6 +31,8 @@
 #include <yarp/os/Time.h>
 
 #include "example-client/ExampleClient.h"
+#include <ocra-icub/IcubClient.h>
+
 
 int main (int argc, char * argv[])
 {
@@ -44,14 +46,20 @@ int main (int argc, char * argv[])
         return -1;
     }
 
+    std::cout << "Making model initializer" << std::endl;
     ocra_icub::ModelInitializer modelIni = ocra_icub::ModelInitializer();
 
     int loopPeriod = 10;
+
     std::shared_ptr<ocra_icub::IcubControllerClient> ctrlClient;
+    std::cout << "Making controller client" << std::endl;
     ctrlClient = std::make_shared<ExampleClient>(modelIni.getModel(), loopPeriod);
 
-    ocra_icub::IcubControllerClientManager clientManager = ocra_icub::IcubControllerClientManager(ctrlClient)
+    std::shared_ptr<ocra_icub::IcubControllerClientManager> clientManager;
+    std::cout << "Making client manager" << std::endl;
+    clientManager = std::make_shared<ocra_icub::IcubControllerClientManager>(ctrlClient);
 
+    std::cout << "Resource finder stuff" << std::endl;
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);
     rf.setDefaultConfigFile("example-client.ini"); //default config file name.
@@ -60,11 +68,15 @@ int main (int argc, char * argv[])
 
     if (rf.check("help"))
     {
-        clientManager.printHelp();
+        clientManager->printHelp();
         return 0;
     }
 
-    clientManager.configure(rf);
+    std::cout << "Configuring" << std::endl;
+    clientManager->configure(rf);
 
-    return clientManager.runModule(rf);
+    std::cout << "Launching client" << std::endl;
+    return clientManager->launchClient();
+
+    // return clientManager->runModule(rf);
 }

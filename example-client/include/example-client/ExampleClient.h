@@ -1,7 +1,7 @@
 #ifndef EXAMPLE_CLIENT_H
 #define EXAMPLE_CLIENT_H
 
-#include <ocra-icub/IcubClient>
+#include <ocra-icub/IcubClient.h>
 
 class ExampleClient : public ocra_icub::IcubControllerClient
 {
@@ -17,16 +17,16 @@ protected:
     virtual void loop();
 
 private:
-
-    double startTime;
-    bool trigger;
-
-    Eigen::MatrixXd waypoints;
-
-    std::shared_ptr<ocra_yarp::TrajectoryThread> leftHandTrajThread;
-
-    bool done;
-    bool p1, p2, p3;
+    // 
+    // double startTime;
+    // bool trigger;
+    //
+    // Eigen::MatrixXd waypoints;
+    //
+    // std::shared_ptr<ocra_yarp::TrajectoryThread> leftHandTrajThread;
+    //
+    // bool done;
+    // bool p1, p2, p3;
 };
 
 

@@ -30,7 +30,7 @@ option(GENERATE_DOCUMENTATION "Generate the doxygen documentation." FALSE)
 
 find_package(YARP REQUIRED)
 find_package(YCM REQUIRED)
-# find_package(OcraYarp REQUIRED)
+find_package(OcraIcub REQUIRED)
 find_package(OcraRecipes REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH
