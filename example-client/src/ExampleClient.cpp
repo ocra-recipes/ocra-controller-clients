@@ -1,7 +1,7 @@
 #include "example-client/ExampleClient.h"
 
-ExampleClient::ExampleClient(std::shared_ptr<ocra_icub::OcraWbiModel> modelPtr, const int loopPeriod)
-: ocra_icub::IcubControllerClient(modelPtr, loopPeriod)
+ExampleClient::ExampleClient(std::shared_ptr<ocra::Model> modelPtr, const int loopPeriod)
+: ocra_recipes::ControllerClient(modelPtr, loopPeriod)
 {
     // poopoo
 }
@@ -23,7 +23,7 @@ void ExampleClient::release()
 
 void ExampleClient::loop()
 {
-    std::cout << "I'm the ExampleClient!" << std::endl;
+
 }
 //
 // bool ExampleClient::client_threadInit()

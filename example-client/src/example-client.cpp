@@ -32,6 +32,8 @@
 
 #include "example-client/ExampleClient.h"
 #include <ocra-icub/IcubClient.h>
+#include <ocra-recipes/ControllerClient.h>
+#include <ocra-recipes/ClientManager.h>
 
 
 int main (int argc, char * argv[])
@@ -51,13 +53,20 @@ int main (int argc, char * argv[])
 
     int loopPeriod = 10;
 
-    std::shared_ptr<ocra_icub::IcubControllerClient> ctrlClient;
+    std::shared_ptr<ocra_recipes::ControllerClient> ctrlClient;
     std::cout << "Making controller client" << std::endl;
+
+    if(modelIni.getModel())
+    {
+        std::cout << "Model is not empty." << std::endl;
+    }else
+        std::cout << "Model IS empty!" << std::endl;
+
     ctrlClient = std::make_shared<ExampleClient>(modelIni.getModel(), loopPeriod);
 
-    std::shared_ptr<ocra_icub::IcubControllerClientManager> clientManager;
+    std::shared_ptr<ocra_recipes::ClientManager> clientManager;
     std::cout << "Making client manager" << std::endl;
-    clientManager = std::make_shared<ocra_icub::IcubControllerClientManager>(ctrlClient);
+    clientManager = std::make_shared<ocra_recipes::ClientManager>(ctrlClient);
 
     std::cout << "Resource finder stuff" << std::endl;
     yarp::os::ResourceFinder rf;

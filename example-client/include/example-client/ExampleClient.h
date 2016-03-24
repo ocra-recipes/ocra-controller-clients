@@ -3,12 +3,12 @@
 
 #include <ocra-icub/IcubClient.h>
 
-class ExampleClient : public ocra_icub::IcubControllerClient
+class ExampleClient : public ocra_recipes::ControllerClient
 {
 DEFINE_CLASS_POINTER_TYPEDEFS(ExampleClient)
 
 public:
-    ExampleClient (std::shared_ptr<ocra_icub::OcraWbiModel> modelPtr, const int loopPeriod);
+    ExampleClient (std::shared_ptr<ocra::Model> modelPtr, const int loopPeriod);
     virtual ~ExampleClient ();
 
 protected:
@@ -17,7 +17,7 @@ protected:
     virtual void loop();
 
 private:
-    // 
+    //
     // double startTime;
     // bool trigger;
     //
