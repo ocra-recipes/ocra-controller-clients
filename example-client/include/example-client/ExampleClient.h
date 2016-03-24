@@ -2,6 +2,9 @@
 #define EXAMPLE_CLIENT_H
 
 #include <ocra-icub/IcubClient.h>
+#include <ocra-icub/TrajectoryThread.h>
+#include <ocra-recipes/ControllerClient.h>
+// #include <ocra/control/Model.h>
 
 class ExampleClient : public ocra_recipes::ControllerClient
 {
@@ -17,16 +20,16 @@ protected:
     virtual void loop();
 
 private:
-    //
-    // double startTime;
-    // bool trigger;
-    //
-    // Eigen::MatrixXd waypoints;
-    //
-    // std::shared_ptr<ocra_yarp::TrajectoryThread> leftHandTrajThread;
-    //
-    // bool done;
-    // bool p1, p2, p3;
+
+    double startTime;
+    bool trigger;
+
+    Eigen::MatrixXd waypoints;
+
+    std::shared_ptr<ocra_icub::TrajectoryThread> leftHandTrajThread;
+
+    bool done;
+    bool p1, p2, p3;
 };
 
 
