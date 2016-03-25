@@ -48,6 +48,7 @@ yarp_configure_external_installation(codyco)
 
 
 add_subdirectory(example-client)
+add_subdirectory(stepping-demo)
 # add_subdirectory(your-client)
 
 
