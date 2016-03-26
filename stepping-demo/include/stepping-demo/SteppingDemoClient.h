@@ -52,10 +52,16 @@ private:
 
     bool isBalanced();
     void deactivateFootContacts(FOOT_CONTACTS foot);
-    void checkFeetContacts();
+    void activateFootContacts(FOOT_CONTACTS foot);
+
+    bool isFootInContact(FOOT_CONTACTS foot);
 
     void pauseFor(double _pauseDuration);
     bool pauseFinished();
+
+    bool liftFoot(FOOT_CONTACTS foot);
+    bool setDownFoot(FOOT_CONTACTS foot);
+
 
     double pauseTriggerTime;
     double pauseDuration;
@@ -64,6 +70,7 @@ private:
 
     bool isInLeftSupportMode;
     bool isInRightSupportMode;
+    bool footTrajectoryStarted;
 
     std::shared_ptr<ocra_icub::TrajectoryThread> leftFoot_TrajThread;
     std::shared_ptr<ocra_icub::TrajectoryThread> rightFoot_TrajThread;
@@ -83,6 +90,7 @@ private:
     bool getInitialValues;
 
     CONTROL_PHASE currentPhase;
+    CONTROL_PHASE nextPhase;
     bool isMovingCoM;
 
 };
