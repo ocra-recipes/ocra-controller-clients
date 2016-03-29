@@ -33,6 +33,8 @@ bool SteppingDemoClient::initialize()
     com_TrajThread = std::make_shared<ocra_icub::TrajectoryThread>(trajThreadPeriod, comPortName, trajType, termStrategy);
 
 
+    leftFoot_TrajThread->setMaxVelocity(0.02);
+    rightFoot_TrajThread->setMaxVelocity(0.02);
     com_TrajThread->setMaxVelocity(0.01);
     com_TrajThread->setGoalErrorThreshold(0.01);
 
@@ -154,7 +156,7 @@ void SteppingDemoClient::loop()
                     else
                     {
                         if(!isMovingCoM) {
-                            std::cout << "Moving CoM over between feet foot." << std::endl;
+                            std::cout << "Moving CoM over between feet." << std::endl;
                             positionCoMOver(CENTERED_BETWEEN_FEET_XY);
                             isMovingCoM = true;
                             pauseFor(5.0);

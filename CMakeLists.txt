@@ -26,6 +26,11 @@ else()
     message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+
+set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
+
+
 option(GENERATE_DOCUMENTATION "Generate the doxygen documentation." FALSE)
 
 find_package(YARP REQUIRED)
