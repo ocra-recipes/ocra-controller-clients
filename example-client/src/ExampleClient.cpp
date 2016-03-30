@@ -20,16 +20,16 @@ bool ExampleClient::initialize()
 
     std::cout << "portNames[4]: " << portNames[4] << std::endl;
 
-    ocra_icub::TRAJECTORY_TYPE trajType = ocra_icub::MIN_JERK;
+    ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
 
     waypoints.resize(3,1);
     waypoints <<    0.2,
                     -0.06,
                     0.55;
 
-    ocra_icub::TERMINATION_STRATEGY termStrategy = ocra_icub::WAIT_DEACTIVATE;
+    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::WAIT_DEACTIVATE;
 
-    leftHandTrajThread = std::make_shared<ocra_icub::TrajectoryThread>(10, portNames[4], waypoints, trajType, termStrategy);
+    leftHandTrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, portNames[4], waypoints, trajType, termStrategy);
 
     // leftHandTrajThread->setDisplacement(0.2);
     leftHandTrajThread->setGoalErrorThreshold(0.03);
@@ -80,13 +80,13 @@ void ExampleClient::loop()
                 if(p1){
                     p1=false;
                     std::cout << "Changing to BACK_AND_FORTH mode:" << std::endl;
-                    leftHandTrajThread->setTerminationStrategy(ocra_icub::BACK_AND_FORTH);
+                    leftHandTrajThread->setTerminationStrategy(ocra_recipes::BACK_AND_FORTH);
                 }
                 if ((yarp::os::Time::now()-startTime)>20.0){
                     if(p2){
                         p2=false;
                         std::cout << "Changing to STOP_THREAD mode:" << std::endl;
-                        leftHandTrajThread->setTerminationStrategy(ocra_icub::STOP_THREAD);
+                        leftHandTrajThread->setTerminationStrategy(ocra_recipes::STOP_THREAD);
                     }
                     if ((yarp::os::Time::now()-startTime)>30.0){
                         if(p3){

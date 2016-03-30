@@ -21,16 +21,16 @@ bool SteppingDemoClient::initialize()
     std::cout << "rightFootPortName: " << rightFootPortName << std::endl;
     std::cout << "comPortName: " << comPortName << std::endl;
 
-    ocra_icub::TRAJECTORY_TYPE trajType = ocra_icub::MIN_JERK;
-    ocra_icub::TERMINATION_STRATEGY termStrategy = ocra_icub::WAIT;
+    ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
+    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::WAIT;
     int trajThreadPeriod = 10;
 
 
-    leftFoot_TrajThread = std::make_shared<ocra_icub::TrajectoryThread>(trajThreadPeriod, leftFootPortName, trajType, termStrategy);
+    leftFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, leftFootPortName, trajType, termStrategy);
 
-    rightFoot_TrajThread = std::make_shared<ocra_icub::TrajectoryThread>(trajThreadPeriod, rightFootPortName, trajType, termStrategy);
+    rightFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, rightFootPortName, trajType, termStrategy);
 
-    com_TrajThread = std::make_shared<ocra_icub::TrajectoryThread>(trajThreadPeriod, comPortName, trajType, termStrategy);
+    com_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, comPortName, trajType, termStrategy);
 
 
     leftFoot_TrajThread->setMaxVelocity(0.02);

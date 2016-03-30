@@ -2,7 +2,7 @@
 #define STEPPING_DEMO_CLIENT_H
 
 #include <ocra-icub/IcubClient.h>
-#include <ocra-icub/TrajectoryThread.h>
+#include <ocra-recipes/TrajectoryThread.h>
 #include <ocra-recipes/ControllerClient.h>
 // #include <ocra/control/Model.h>
 
@@ -72,9 +72,9 @@ private:
     bool isInRightSupportMode;
     bool footTrajectoryStarted;
 
-    std::shared_ptr<ocra_icub::TrajectoryThread> leftFoot_TrajThread;
-    std::shared_ptr<ocra_icub::TrajectoryThread> rightFoot_TrajThread;
-    std::shared_ptr<ocra_icub::TrajectoryThread> com_TrajThread;
+    std::shared_ptr<ocra_recipes::TrajectoryThread> leftFoot_TrajThread;
+    std::shared_ptr<ocra_recipes::TrajectoryThread> rightFoot_TrajThread;
+    std::shared_ptr<ocra_recipes::TrajectoryThread> com_TrajThread;
 
 
     Eigen::Vector3d leftFootHome;

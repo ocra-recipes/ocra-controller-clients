@@ -2,7 +2,7 @@
 #define EXAMPLE_CLIENT_H
 
 #include <ocra-icub/IcubClient.h>
-#include <ocra-icub/TrajectoryThread.h>
+#include <ocra-recipes/TrajectoryThread.h>
 #include <ocra-recipes/ControllerClient.h>
 // #include <ocra/control/Model.h>
 
@@ -26,7 +26,7 @@ private:
 
     Eigen::MatrixXd waypoints;
 
-    std::shared_ptr<ocra_icub::TrajectoryThread> leftHandTrajThread;
+    std::shared_ptr<ocra_recipes::TrajectoryThread> leftHandTrajThread;
 
     bool done;
     bool p1, p2, p3;
