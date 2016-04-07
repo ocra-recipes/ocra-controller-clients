@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SET(PROJECTNAME example-client)
+SET(PROJECTNAME test-client)
 PROJECT(${PROJECTNAME} CXX)
 
 FILE(GLOB folder_source ./src/*.cpp)
@@ -27,8 +27,8 @@ SOURCE_GROUP("Header Files" FILES ${folder_header})
 INCLUDE_DIRECTORIES(
 ${PROJECT_SOURCE_DIR}/include
 ${YARP_INCLUDE_DIRS}
-${OcraIcub_INCLUDE_DIRS}
 ${OcraRecipes_INCLUDE_DIRS}
+${OcraIcub_INCLUDE_DIRS}
 )
 
 ADD_EXECUTABLE(${PROJECTNAME} ${folder_source} ${folder_header})
