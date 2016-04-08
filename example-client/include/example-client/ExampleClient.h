@@ -22,6 +22,7 @@ protected:
 private:
 
     double startTime;
+    double waitTime;
     bool trigger;
     bool done;
     Eigen::MatrixXd waypoints;

@@ -18,17 +18,18 @@ bool ExampleClient::initialize()
 
     ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
 
-    waypoints.resize(3,1);
-    waypoints <<    0.2,
-                    -0.06,
-                    0.55;
+    waypoints.resize(3,3);
+    waypoints <<     0.20, 0.25, 0.15,
+                    -0.06, 0.10, 0.30,
+                     0.55, 0.85, 0.65;
 
-    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::WAIT_DEACTIVATE;
+    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::BACK_AND_FORTH;
 
     leftHandTrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, "leftHandCartesian", waypoints, trajType, termStrategy);
 
     // leftHandTrajThread->setDisplacement(0.2);
     leftHandTrajThread->setGoalErrorThreshold(0.03);
+    leftHandTrajThread->setMaxVelocity(0.2);
 
 
     done=false;
@@ -36,6 +37,8 @@ bool ExampleClient::initialize()
     p1 = true;
     p2 = true;
     p3 = true;
+
+    waitTime = 1.0;
 
     std::cout << "Begin loop." << std::endl;
 
@@ -50,7 +53,7 @@ void ExampleClient::release()
 void ExampleClient::loop()
 {
 
-    while(!done)
+    while(!done && ((yarp::os::Time::now() - startTime) > waitTime))
     {
         if(trigger){
             leftHandTrajThread->start();
@@ -58,24 +61,23 @@ void ExampleClient::loop()
             trigger = false;
         }
 
-        if ((yarp::os::Time::now()-startTime)>10.0){
+        if ((yarp::os::Time::now()-startTime)>15.0){
             if(p1){
                 p1=false;
-                std::cout << "Changing to BACK_AND_FORTH mode:" << std::endl;
-                leftHandTrajThread->setTerminationStrategy(ocra_recipes::BACK_AND_FORTH);
+                std::cout << "Changing to CYCLE mode." << std::endl;
+                leftHandTrajThread->setTerminationStrategy(ocra_recipes::CYCLE);
             }
-            if ((yarp::os::Time::now()-startTime)>20.0){
+            if ((yarp::os::Time::now()-startTime)>30.0){
                 if(p2){
                     p2=false;
-                    std::cout << "Changing to STOP_THREAD mode:" << std::endl;
-                    leftHandTrajThread->setTerminationStrategy(ocra_recipes::STOP_THREAD);
+                    std::cout << "Pausing trajectory." << std::endl;
+                    leftHandTrajThread->pause();
                 }
-                if ((yarp::os::Time::now()-startTime)>30.0){
+                if ((yarp::os::Time::now()-startTime)>40.0){
                     if(p3){
                         p3=false;
-                        std::cout << "Finished while loop!" << std::endl;
-                        std::cout << "Stopping thread..." << std::endl;
-                        leftHandTrajThread->stop();
+                        std::cout << "Un-pausing trajectory." << std::endl;
+                        leftHandTrajThread->unpause();
                         done=true;
                     }
                 }
