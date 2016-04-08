@@ -16,10 +16,6 @@ bool ExampleClient::initialize()
     startTime = yarp::os::Time::now();
     trigger = true;
 
-    std::vector<std::string> portNames = clientComs->getTaskPortNames();
-
-    std::cout << "portNames[4]: " << portNames[4] << std::endl;
-
     ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
 
     waypoints.resize(3,1);
@@ -29,7 +25,7 @@ bool ExampleClient::initialize()
 
     ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::WAIT_DEACTIVATE;
 
-    leftHandTrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, portNames[4], waypoints, trajType, termStrategy);
+    leftHandTrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, "leftHandCartesian", waypoints, trajType, termStrategy);
 
     // leftHandTrajThread->setDisplacement(0.2);
     leftHandTrajThread->setGoalErrorThreshold(0.03);
