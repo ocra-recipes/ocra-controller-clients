@@ -23,12 +23,11 @@ private:
 
     double startTime;
     bool trigger;
-
+    bool done;
     Eigen::MatrixXd waypoints;
 
     std::shared_ptr<ocra_recipes::TrajectoryThread> leftHandTrajThread;
 
-    bool done;
     bool p1, p2, p3;
 };
 
