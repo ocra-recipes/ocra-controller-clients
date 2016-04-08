@@ -13,24 +13,24 @@ SteppingDemoClient::~SteppingDemoClient()
 
 bool SteppingDemoClient::initialize()
 {
-    std::string leftFootPortName = clientComs->getTaskPortName("leftFootCartesian");
-    std::string rightFootPortName = clientComs->getTaskPortName("rightFootCartesian");
-    std::string comPortName = clientComs->getTaskPortName("comTask");
-
-    std::cout << "leftFootPortName: " << leftFootPortName << std::endl;
-    std::cout << "rightFootPortName: " << rightFootPortName << std::endl;
-    std::cout << "comPortName: " << comPortName << std::endl;
+    // std::string leftFootPortName = clientComs->getTaskPortName("leftFootCartesian");
+    // std::string rightFootPortName = clientComs->getTaskPortName("rightFootCartesian");
+    // std::string comPortName = clientComs->getTaskPortName("comTask");
+    //
+    // std::cout << "leftFootPortName: " << leftFootPortName << std::endl;
+    // std::cout << "rightFootPortName: " << rightFootPortName << std::endl;
+    // std::cout << "comPortName: " << comPortName << std::endl;
 
     ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
     ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::WAIT;
     int trajThreadPeriod = 10;
 
 
-    leftFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, leftFootPortName, trajType, termStrategy);
+    leftFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, "leftFootCartesian", trajType, termStrategy);
 
-    rightFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, rightFootPortName, trajType, termStrategy);
+    rightFoot_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, "rightFootCartesian", trajType, termStrategy);
 
-    com_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, comPortName, trajType, termStrategy);
+    com_TrajThread = std::make_shared<ocra_recipes::TrajectoryThread>(trajThreadPeriod, "comTask", trajType, termStrategy);
 
 
     leftFoot_TrajThread->setMaxVelocity(0.02);
