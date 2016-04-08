@@ -48,8 +48,8 @@ bool SteppingDemoClient::initialize()
     getInitialValues = true;
     startTime = yarp::os::Time::now();
 
-    leftFootRpcClient = clientComs->getTaskClient("contactSetLeftFoot");
-    rightFootRpcClient = clientComs->getTaskClient("contactSetRightFoot");
+    leftFootContacts = std::make_shared<ocra_recipes::TaskConnection>("contactSetLeftFoot");
+    rightFootContacts = std::make_shared<ocra_recipes::TaskConnection>("contactSetRightFoot");
 
     isInLeftSupportMode = true;
     isInRightSupportMode = true;
@@ -249,51 +249,45 @@ bool SteppingDemoClient::isBalanced()
 
 void SteppingDemoClient::deactivateFootContacts(FOOT_CONTACTS foot)
 {
-    yarp::os::Bottle message, reply;
-    message.addString("deactivate");
-
     switch (foot) {
         case LEFT_FOOT:
         {
-            leftFootRpcClient->write(message, reply);
+            if(leftFootContacts->deactivate() ) {
+                std::cout << "Deactivated left foot contacts." << std::endl;
+            }
         }break;
 
         case RIGHT_FOOT:
         {
-            rightFootRpcClient->write(message, reply);
+            if (rightFootContacts->deactivate()) {
+                std::cout << "Deactivated right foot contacts." << std::endl;
+            }
         }break;
 
         default:
         break;
-    }
-    if (reply.get(0).asString()=="deactivated")
-    {
-        std::cout << "Deactivated " << foot << " contacts." << std::endl;
     }
 }
 
 void SteppingDemoClient::activateFootContacts(FOOT_CONTACTS foot)
 {
-    yarp::os::Bottle message, reply;
-    message.addString("activate");
-
     switch (foot) {
         case LEFT_FOOT:
         {
-            leftFootRpcClient->write(message, reply);
+            if(leftFootContacts->activate() ) {
+                std::cout << "Activated left foot contacts." << std::endl;
+            }
         }break;
 
         case RIGHT_FOOT:
         {
-            rightFootRpcClient->write(message, reply);
+            if (rightFootContacts->activate()) {
+                std::cout << "Activated right foot contacts." << std::endl;
+            }
         }break;
 
         default:
         break;
-    }
-    if (reply.get(0).asString()=="activated")
-    {
-        std::cout << "Activated " << foot << " contacts." << std::endl;
     }
 }
 

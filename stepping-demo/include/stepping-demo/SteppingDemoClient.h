@@ -41,9 +41,9 @@ protected:
     virtual void loop();
 
 private:
+    std::shared_ptr<ocra_recipes::TaskConnection> leftFootContacts;
+    std::shared_ptr<ocra_recipes::TaskConnection> rightFootContacts;
 
-    std::shared_ptr<yarp::os::RpcClient> leftFootRpcClient;
-    std::shared_ptr<yarp::os::RpcClient> rightFootRpcClient;
 
     Eigen::Vector3d getLeftFootPosition();
     Eigen::Vector3d getRightFootPosition();
